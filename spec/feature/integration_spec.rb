@@ -33,7 +33,7 @@ RSpec.describe 'Creating a book', type: :feature do
     click_on 'Create Book'
     visit books_path
 	
-    expect(page).not_to have_content('JK Rowling')
+    expect(page).not_to have_content('harry potter')
 	
   end
   
@@ -49,7 +49,7 @@ RSpec.describe 'Creating a book', type: :feature do
     click_on 'Create Book'
     visit books_path
 	
-    expect(page).not_to have_content('harry potter')
+    expect(page).not_to have_content('10.29')
 	
   end
   
@@ -66,7 +66,23 @@ RSpec.describe 'Creating a book', type: :feature do
     click_on 'Create Book'
     visit books_path
 	
-    expect(page).not_to have_content('10.29')
+    expect(page).not_to have_content('harry potter')
+	
+  end
+  
+  scenario 'does not have a valid date' do 
+	visit new_book_path
+	fill_in 'Title', with: 'harry potter'
+    fill_in 'Author', with: 'JK Rowling'
+	fill_in 'Price', with: '10.29'
+	select 2021, :from => "book[published_date(1i)]"
+	select 'June',  :from=> "book[published_date(2i)]"
+	select 11, :from=> "book[published_date(3i)]"
+
+    click_on 'Create Book'
+    visit books_path
+	
+    expect(page).to have_content('2021-06-11')
 	
   end
   
